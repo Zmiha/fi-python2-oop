@@ -1,5 +1,6 @@
 # TODO Написать 3 класса с документацией и аннотацией типов
 import random
+from time import sleep
 from typing import Union
 import doctest
 
@@ -180,13 +181,17 @@ class DiceGame:
             raise TypeError("Количество очков необходимое для победы должно иметь тип  int")
         self.win_score = win_score
 
-        self.players_score = [0] * players
+        self.players_score = [0] * (players + 1)
+        self.players_score[-1] = 1
 
     def next_turn(self) -> None:
         """
         Функция, отвечающая за продвижение игры в кости и подсчитывающая результаты ходов
         """
+        print(f"Ход №{self.players_score[-1]}")
+        self.players_score[-1] += 1
         for i in range(self.players):
+            sleep(1)
             dice1 = random.randint(1, 20)
             dice2 = random.randint(1, 20)
             if dice1 == dice2 == 20:
@@ -205,9 +210,9 @@ class DiceGame:
             elif dice1 == dice2 == 1:
                 print(f"Игрок под номером {i+1} потерпел ужасную неудачу и теряет 40 очков :( "
                       f"теперь его счет становится равен {self.players_score[i]}")
-                self.players_score[i - 1] -= 40
+                self.players_score[i] -= 40
             elif dice1 == 1 or dice2 == 1:
-                self.players_score[i - 1] -= 20
+                self.players_score[i] -= 20
                 print(f"Игрок под номером {i+1} потерпел неудачу и теряет 20 очков :( "
                       f"теперь его счет становится равен {self.players_score[i]}")
             else:
@@ -228,7 +233,8 @@ class DiceGame:
         >>> game = DiceGame(3, 50)
         >>> game.refresh_score()
         """
-        self.players_score = [0] * self.players
+        self.players_score = [0] * (self.players + 1)
+        self.players_score[-1] = 1
 
     def change_win_score(self, new_win_score) -> None:
         """
@@ -254,7 +260,7 @@ if __name__ == "__main__":
     doctest.testmod()
     pass
     # Проверка игры в кости
-    """game = DiceGame(3, 50)
+    """game = DiceGame(6, 190)
     continue_ = input()
     while continue_ is not None:
         game.next_turn()
